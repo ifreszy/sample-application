@@ -28,7 +28,7 @@ namespace Data.Database.Impl
 
         public T ExecuteScalar<T>(string query, object parameters = null, IDbTransaction transaction = null)
         {
-            throw new NotImplementedException();
+            return _connection.ExecuteScalar<T>(query, parameters, transaction);   
         }
 
         public IEnumerable<T> Query<T>(string query, object parameters = null, IDbTransaction transaction = null)
@@ -43,7 +43,7 @@ namespace Data.Database.Impl
 
         public T QuerySingle<T>(string query, object parameters = null, IDbTransaction transaction = null)
         {
-            throw new NotImplementedException();
+            return _connection.QuerySingleOrDefault<T>(query, parameters, transaction);  
         }
     }
 }

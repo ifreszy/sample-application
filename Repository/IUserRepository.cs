@@ -1,4 +1,5 @@
-﻿using Entity.Models;
+﻿using DTO;
+using Entity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace Repository
     public interface IUserRepository
     {
         IEnumerable<UserModel> GetUsers();
+        UserModel SaveUser(UserModel user);
+        UserModel GetUserByLogin(string login);
     }
 }

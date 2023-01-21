@@ -17,6 +17,10 @@ using System.Threading.Tasks;
 using sample_application.Mappings.Extension;
 using Migrations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Services.Auth;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace sample_application
 {
@@ -44,10 +48,70 @@ namespace sample_application
             services.AddMappers();
             services.AddRepositories();
             services.AddServices();
+
+            #region JWT Auth config
+            var tokenSettings = new AuthSettings();
+
+            services.AddAuth(tokenSettings);
+            #endregion
+
             services.AddControllers();
+
+            #region JWT Setup
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenSettings.Key)),
+                    ValidateIssuer = false,
+                    ValidateAudience = false
+                };
+            });
+            #endregion
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "sample_application", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "sample_application",
+                    Version = "v1",
+                    Description = "Sample application using repository pattern and EF core for migrations",
+                    Contact = new OpenApiContact()
+                    {
+                        Url = new Uri("https://github.com/ifreszy/sample-application")
+                    }
+                });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a token",
+                    Name = "Authorization",
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer",
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme()
+                        {
+                            Reference = new OpenApiReference()
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] {}
+                    }
+                });
             });
         }
 
@@ -65,6 +129,7 @@ namespace sample_application
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

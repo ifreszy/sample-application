@@ -1,3 +1,5 @@
+using AutoMapper;
+using DTO;
 using Entity.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NSubstitute;
@@ -13,11 +15,12 @@ namespace ServicesTests
     {
         private IUserService _userServiceTestTarget;
         private readonly IUserRepository _userRepository = Substitute.For<IUserRepository>();
+        private readonly IMapper _mapper = Substitute.For<IMapper>();
 
         [TestInitialize]
         public void TestInitialize()
         {
-            _userServiceTestTarget = new UserService(_userRepository);
+            _userServiceTestTarget = new UserService(_userRepository, _mapper);
             Assert.IsNotNull(_userRepository);
         }
 
@@ -53,6 +56,62 @@ namespace ServicesTests
 
             //Assert
             Assert.AreEqual(users, response);
+        }
+
+        [TestMethod]
+        public void Method_SaveUser_ShouldReturnNewUser()
+        {
+            //Arrange
+            var newUserPayload = new CreateUserDTO()
+            {
+                Login = "login",
+                Email = "email",
+                ConfirmPassword = "password",
+                Password = "password",
+                Name = "name",
+            };
+
+            var newUser = new UserModel()
+            {
+                Login = "login",
+                Email = "email",
+                Password = "password",
+                Name = "name",
+                Bio = null,
+                Id = 1
+            };
+
+            _userRepository.SaveUser(Arg.Any<UserModel>()).Returns(newUser);
+
+            //Act
+            var response = _userServiceTestTarget.SaveUser(newUserPayload);
+
+            //Assert
+            Assert.AreEqual(newUser, response);
+        }
+
+        [TestMethod]
+        public void Method_GetUserByLogin_ShouldReturnUser()
+        {
+            //Arrange
+            string login = "login";
+
+            var user = new UserModel()
+            {
+                Login = "login",
+                Email = "email",
+                Password = "password",
+                Name = "name",
+                Bio = null,
+                Id = 1
+            };
+
+            _userRepository.GetUserByLogin(login).Returns(user);
+            //Act
+            var response = _userServiceTestTarget.GetUserByLogin(login);
+
+            //Assert
+            Assert.AreEqual(user, response);
         }
     }
 }
