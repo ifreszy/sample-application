@@ -9,11 +9,11 @@ namespace Data.Database
 {
     public interface IDbCustomConnection
     {
-        public IEnumerable<T> Query<T>(string Sql, object Params = null, IDbTransaction Transacao = null);
-        public T QueryFirst<T>(string Sql, object Params = null, IDbTransaction Transacao = null);
-        public T ExecuteScalar<T>(string Sql, object Params = null, IDbTransaction Transacao = null);
+        public IEnumerable<T> Query<T>(string query, object parameters = null, IDbTransaction transaction = null);
+        public T QueryFirst<T>(string query, object parameters = null, IDbTransaction transaction = null);
+        public T ExecuteScalar<T>(string query, object parameters = null, IDbTransaction transaction = null);
         public IDbTransaction BeginTransaction();
-        public T QuerySingle<T>(string Sql, object Params = null, IDbTransaction Transacao = null);
-        public int Execute(string Sql, object Params = null, IDbTransaction Transacao = null);
+        public T QuerySingle<T>(string query, object parameters = null, IDbTransaction transaction = null);
+        public int Execute(string query, object parameters = null, IDbTransaction transaction = null);
     }
 }

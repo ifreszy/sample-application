@@ -21,27 +21,27 @@ namespace Data.Database.Impl
             throw new NotImplementedException();
         }
 
-        public int Execute(string Sql, object Params = null, IDbTransaction Transacao = null)
+        public int Execute(string query, object parameters = null, IDbTransaction transaction = null)
         {
-            return _connection.Execute(Sql, Params, Transacao);
+            return _connection.Execute(query, parameters, transaction);
         }
 
-        public T ExecuteScalar<T>(string Sql, object Params = null, IDbTransaction Transacao = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IEnumerable<T> Query<T>(string Sql, object Params = null, IDbTransaction Transacao = null)
-        {
-            return _connection.Query<T>(Sql, Params, Transacao);
-        }
-
-        public T QueryFirst<T>(string Sql, object Params = null, IDbTransaction Transacao = null)
+        public T ExecuteScalar<T>(string query, object parameters = null, IDbTransaction transaction = null)
         {
             throw new NotImplementedException();
         }
 
-        public T QuerySingle<T>(string Sql, object Params = null, IDbTransaction Transacao = null)
+        public IEnumerable<T> Query<T>(string query, object parameters = null, IDbTransaction transaction = null)
+        {
+            return _connection.Query<T>(query, parameters, transaction);
+        }
+
+        public T QueryFirst<T>(string query, object parameters = null, IDbTransaction transaction = null)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T QuerySingle<T>(string query, object parameters = null, IDbTransaction transaction = null)
         {
             throw new NotImplementedException();
         }
