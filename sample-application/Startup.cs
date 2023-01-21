@@ -15,6 +15,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using sample_application.Mappings.Extension;
+using Migrations;
+using Microsoft.EntityFrameworkCore;
 
 namespace sample_application
 {
@@ -30,6 +32,14 @@ namespace sample_application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationContext>(opt =>
+            {
+                opt.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE"), x =>
+                {
+                    x.MigrationsAssembly("Migrations");
+                });
+            });
+
             services.AddDbConnection(Configuration.GetConnectionString("database"));
             services.AddMappers();
             services.AddRepositories();
