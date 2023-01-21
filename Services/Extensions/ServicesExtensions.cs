@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Services.Auth;
 using Services.Impl;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,12 @@ namespace Services.Extensions
     {
         public static void AddServices(this IServiceCollection services)
         {
-            services.AddScoped<IUserService, UserService>();
+            services.AddTransient<IUserService, UserService>();
+        }
+
+        public static void AddAuth(this IServiceCollection services, AuthSettings settings) 
+        { 
+            services.AddSingleton<IAuthService, AuthService>(x => new AuthService(settings ?? new AuthSettings()));
         }
     }
 }

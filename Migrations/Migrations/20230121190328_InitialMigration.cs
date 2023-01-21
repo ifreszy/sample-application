@@ -14,12 +14,12 @@ namespace Migrations.Migrations
                     name: "users",
                     columns: table => new
                     {
-                        Id = table.Column<long>(nullable: false, type: "serial"),
-                        Name = table.Column<string>(nullable: false, maxLength: 100),
-                        Email = table.Column<string>(nullable: false, maxLength: 100),
-                        Login = table.Column<string>(nullable: false, maxLength: 100),
-                        Password = table.Column<string>(nullable: false, maxLength: 100),
-                        Bio = table.Column<string>(nullable: true, maxLength: 1000),
+                        Id = table.Column<long>(nullable: false, type: "serial", name: "id"),
+                        Name = table.Column<string>(nullable: false, maxLength: 100, name: "name"),
+                        Email = table.Column<string>(nullable: false, maxLength: 100, name: "email"),
+                        Login = table.Column<string>(nullable: false, maxLength: 100, name: "login"),
+                        Password = table.Column<string>(nullable: false, maxLength: 100, name: "password"),
+                        Bio = table.Column<string>(nullable: true, maxLength: 1000, name: "bio"),
                     },
                     constraints: table =>
                     {
@@ -29,7 +29,7 @@ namespace Migrations.Migrations
                     }
                 );
 
-            migrationBuilder.CreateIndex("IDX_userId", "users", "Id");
+            migrationBuilder.CreateIndex("IDX_userId", "users", "id");
         }
 
         /// <inheritdoc />
