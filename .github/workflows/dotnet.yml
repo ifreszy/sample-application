@@ -23,8 +23,8 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Restore dependencies
-      run: dotnet restore 'sample-application/sample-application.sln'
+      run: dotnet restore 'sample-application/sample-application.sln' --configuration 'Release'
     - name: Build
-      run: dotnet build 'sample-application/sample-application.sln' --no-restore
+      run: dotnet build 'sample-application/sample-application.sln' --no-restore --configuration 'Release'
     - name: Test
-      run: dotnet test 'sample-application/sample-application.sln' --no-build --verbosity normal
+      run: dotnet test 'sample-application/sample-application.sln' --no-build --verbosity normal --configuration 'Release'
