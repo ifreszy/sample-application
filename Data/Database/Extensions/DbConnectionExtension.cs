@@ -15,7 +15,7 @@ namespace Data.Database.Extensions
         {
             if (string.IsNullOrEmpty(connStr))
                 connStr = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE");
-            services.AddTransient((sp) => DbConnectionHelper.CreateDatabaseConnection(connStr));
+            services.AddScoped((sp) => DbConnectionHelper.CreateDatabaseConnection(connStr));
             services.AddTransient<IDbCustomConnection, DbCustomConnection>();
         }
     }

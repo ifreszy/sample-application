@@ -52,6 +52,8 @@ namespace sample_application
             #region JWT Auth config
             var tokenSettings = new AuthSettings();
 
+            Configuration.GetSection("AuthSettings").Bind(tokenSettings);
+
             services.AddAuth(tokenSettings);
             #endregion
 
@@ -109,7 +111,7 @@ namespace sample_application
                                 Id = "Bearer"
                             }
                         },
-                        new string[] {}
+                        Array.Empty<string>()
                     }
                 });
             });
