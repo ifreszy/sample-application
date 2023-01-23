@@ -22,6 +22,5 @@ dotnet ef database update --startup-project sample-application --project Migrati
 
 ##### Visual Studio - Package Manager
 ```csharp 
-//to update database using Package Manager, first set the startup project to 'sample-application'
 Update-Database -Project Migrations 
 ```
