@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Services.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Data.Database.Utils;
 
 namespace sample_application
 {
@@ -36,15 +37,29 @@ namespace sample_application
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var connectionString = (Configuration.GetConnectionString("type") == "ORACLE" ? 
+                DataBaseType.ORACLE : DataBaseType.POSTGRESQL, Configuration.GetConnectionString("database"));
+
             services.AddDbContext<ApplicationContext>(opt =>
             {
-                opt.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE"), x =>
+                if (connectionString.Item1 == DataBaseType.POSTGRESQL)
                 {
-                    x.MigrationsAssembly("Migrations");
-                });
+                    opt.UseNpgsql(connectionString.Item2, opt =>
+                    {
+                        opt.MigrationsAssembly("Migrations");
+                    });
+                }
+
+                if (connectionString.Item1 == DataBaseType.ORACLE) 
+                {
+                    opt.UseOracle(connectionString.Item2, opt =>
+                    {
+                        opt.MigrationsAssembly("Migrations");
+                    });
+                }
             });
 
-            services.AddDbConnection(Configuration.GetConnectionString("database"));
+            services.AddDbConnection(connectionString.Item2, connectionString.Item1);
             services.AddMappers();
             services.AddRepositories();
             services.AddServices();
@@ -56,7 +71,7 @@ namespace sample_application
 
             services.AddAuth(tokenSettings);
             #endregion
-
+            //services.AddCors();
             services.AddControllers();
 
             #region JWT Setup
@@ -73,7 +88,9 @@ namespace sample_application
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenSettings.Key)),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero
                 };
             });
             #endregion
@@ -128,6 +145,13 @@ namespace sample_application
             }
 
             app.UseHttpsRedirection();
+
+            /*app.UseCors(x =>
+            {
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+                x.AllowAnyMethod();
+            });*/
 
             app.UseRouting();
 

@@ -10,16 +10,18 @@ namespace Migrations.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateSequence("USERS_SEQ");
+
             migrationBuilder.CreateTable(
-                    name: "users",
+                    name: "USERS",
                     columns: table => new
                     {
-                        Id = table.Column<long>(nullable: false, type: "serial", name: "id"),
-                        Name = table.Column<string>(nullable: false, maxLength: 100, name: "name"),
-                        Email = table.Column<string>(nullable: false, maxLength: 100, name: "email"),
-                        Login = table.Column<string>(nullable: false, maxLength: 100, name: "login"),
-                        Password = table.Column<string>(nullable: false, maxLength: 100, name: "password"),
-                        Bio = table.Column<string>(nullable: true, maxLength: 1000, name: "bio"),
+                        Id = table.Column<long>(nullable: false, type: "NUMBER", defaultValueSql: "USERS_SEQ.nextval", name: "ID"),
+                        Name = table.Column<string>(nullable: false, maxLength: 100, name: "NAME"),
+                        Email = table.Column<string>(nullable: false, maxLength: 100, name: "EMAIL"),
+                        Login = table.Column<string>(nullable: false, maxLength: 100, name: "LOGIN"),
+                        Password = table.Column<string>(nullable: false, maxLength: 100, name: "PASSWORD"),
+                        Bio = table.Column<string>(nullable: true, maxLength: 1000, name: "BIO"),
                     },
                     constraints: table =>
                     {
@@ -28,15 +30,13 @@ namespace Migrations.Migrations
                         table.UniqueConstraint("UK_userLogin", x => x.Login);
                     }
                 );
-
-            migrationBuilder.CreateIndex("IDX_userId", "users", "id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex("IDX_userId", "users", "Id");
-            migrationBuilder.DropTable("users");
+            migrationBuilder.DropTable("USERS");
+            migrationBuilder.DropSequence("USERS_SEQ");
         }
     }
 }

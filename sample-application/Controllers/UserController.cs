@@ -2,6 +2,7 @@
 using DTO;
 using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services;
@@ -40,6 +41,17 @@ namespace sample_application.Controllers
         public ActionResult<UserDTO> CreateUser(CreateUserDTO user)
         {
             var newUser = _userService.SaveUser(user);
+
+            return Ok(_mapper.Map<UserModel, UserDTO>(newUser));
+        }
+
+        [HttpDelete]
+        [Route("delete")]
+        [AllowAnonymous]
+        public ActionResult<UserDTO> DeleteUser(int empresa, int revenda)
+        {
+            //var newUser = _userService.SaveUser(user);
+            var newUser = new UserModel();
 
             return Ok(_mapper.Map<UserModel, UserDTO>(newUser));
         }

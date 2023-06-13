@@ -12,6 +12,7 @@ namespace Repository.Impl
     public class UserRepository : IUserRepository
     {
         private readonly IDbCustomConnection _connection;
+        private readonly string SQL_SEQUENCE = "SELECT USERS_SEQ.CURRVAL FROM DUAL";
         public UserRepository(IDbCustomConnection connection)
         {
             _connection = connection;
@@ -19,7 +20,7 @@ namespace Repository.Impl
 
         public UserModel GetUserByLogin(string login)
         {
-            string sql = "SELECT * FROM users WHERE login = :login";
+            string sql = "SELECT * FROM USERS WHERE LOGIN = :login";
 
             return _connection.QuerySingle<UserModel>(sql, new { login });
         }
@@ -33,11 +34,13 @@ namespace Repository.Impl
 
         public UserModel SaveUser(UserModel user)
         {
-            string sql = @"INSERT INTO USERS (Name, Email, Login, Password, Bio)
+            string sql = @"INSERT INTO USERS (NAME, EMAIL, LOGIN, PASSWORD, BIO)
                             VALUES
-                            (:Name, :Email, :Login, :Password, :Bio) RETURNING Id";
+                            (:Name, :Email, :Login, :Password, :Bio)";
             
-            user.Id = _connection.ExecuteScalar<long>(sql, user);
+            _connection.ExecuteScalar<long>(sql, user);
+
+            user.Id = _connection.ExecuteScalar<long>(SQL_SEQUENCE);
 
             return user;
         }
