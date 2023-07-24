@@ -19,6 +19,10 @@ namespace ApplicationContext
             {
                 modelBuilder.ApplyConfigurationsFromAssembly(Assembly.Load("MigrationsPostgreSQL"));
             }
+            else if (Database.ProviderName!.Contains("Oracle"))
+            {
+                modelBuilder.ApplyConfigurationsFromAssembly(Assembly.Load("MigrationsOracle"));
+            }
         }
 
         public DbSet<UserModel> Users { get; set; }
