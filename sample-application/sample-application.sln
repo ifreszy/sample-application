@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.33214.272
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sample-application", "sample-application.csproj", "{7EFAC77E-6701-4408-B14B-8F3CB970C77C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1EFEA6EC-C920-4B0C-8B9B-836039808D37} = {1EFEA6EC-C920-4B0C-8B9B-836039808D37}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "..\Data\Data.csproj", "{6778EA7C-40E3-4ED8-A413-DFF095846B82}"
 EndProject
@@ -19,7 +22,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A7BDAEED
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicesTests", "..\ServicesTests\ServicesTests.csproj", "{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Migrations", "..\Migrations\Migrations.csproj", "{6D0C9AAD-9373-43AC-A616-FAA2A1F231B4}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{60611A84-8996-4AA2-8E4A-C0CC9ABD483B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigrationsPostgreSQL", "..\Migrations\MigrationsPostgreSQL\MigrationsPostgreSQL.csproj", "{E34EDB29-FC8B-4E24-8AD6-04C59887C205}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigrationsOracle", "..\Migrations\MigrationsOracle\MigrationsOracle.csproj", "{1EFEA6EC-C920-4B0C-8B9B-836039808D37}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationContext", "..\ApplicationContext\ApplicationContext.csproj", "{D8FDA778-131B-410C-9E6F-15B92447F8B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,16 +64,27 @@ Global
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D0C9AAD-9373-43AC-A616-FAA2A1F231B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D0C9AAD-9373-43AC-A616-FAA2A1F231B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D0C9AAD-9373-43AC-A616-FAA2A1F231B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D0C9AAD-9373-43AC-A616-FAA2A1F231B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C} = {A7BDAEED-F1E9-4D96-B2B2-EAC05081D76F}
+		{E34EDB29-FC8B-4E24-8AD6-04C59887C205} = {60611A84-8996-4AA2-8E4A-C0CC9ABD483B}
+		{1EFEA6EC-C920-4B0C-8B9B-836039808D37} = {60611A84-8996-4AA2-8E4A-C0CC9ABD483B}
+		{D8FDA778-131B-410C-9E6F-15B92447F8B2} = {60611A84-8996-4AA2-8E4A-C0CC9ABD483B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FAD5FCD-50C5-47C8-B47A-608B86597985}

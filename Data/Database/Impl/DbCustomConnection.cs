@@ -5,16 +5,21 @@ using Dapper;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Database.Utils;
 
 namespace Data.Database.Impl
 {
     public class DbCustomConnection : IDbCustomConnection
     {
         private readonly IDbConnection _connection;
-        public DbCustomConnection(IDbConnection connection)
+        private readonly DataBaseType _databaseType;
+        public DbCustomConnection(IDbConnection connection, ConnectionSettings connectionSettings)
         {
             _connection = connection;
+            _databaseType = connectionSettings.Type;
         }
+
+        public DataBaseType DataBaseType => _databaseType;
 
         public IDbTransaction BeginTransaction()
         {

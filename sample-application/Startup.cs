@@ -1,27 +1,22 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Data.Database.Extensions;
 using Repository.Extensions;
 using Services.Extensions;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using sample_application.Mappings.Extension;
-using Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Services.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Data.Database.Utils;
+using Migrations;
+using ApplicationContext;
 
 namespace sample_application
 {
@@ -43,14 +38,20 @@ namespace sample_application
             var connectionString = (Configuration.GetConnectionString("type") == "ORACLE" ? 
                 DataBaseType.ORACLE : DataBaseType.POSTGRESQL, ResolveConnectionString);
 
-            services.AddDbContext<ApplicationContext>(opt =>
+            services.AddSingleton(sp => new ConnectionSettings()
+            {
+                Type = connectionString.Item1,
+                Database = connectionString.Item2
+            });
+
+            services.AddDbContext<DatabaseContext>(opt =>
             {
                 Console.WriteLine(connectionString.Item1);
                 if (connectionString.Item1 == DataBaseType.POSTGRESQL)
                 {
                     opt.UseNpgsql(connectionString.Item2, opt =>
                     {
-                        opt.MigrationsAssembly("Migrations");
+                        opt.MigrationsAssembly(@"MigrationsPostgreSQL");
                     });
                 }
 
@@ -58,7 +59,7 @@ namespace sample_application
                 {
                     opt.UseOracle(connectionString.Item2, opt =>
                     {
-                        opt.MigrationsAssembly("Migrations");
+                        opt.MigrationsAssembly(@"MigrationsOracle");
                     });
                 }
             });
