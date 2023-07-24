@@ -44,16 +44,5 @@ namespace sample_application.Controllers
 
             return Ok(_mapper.Map<UserModel, UserDTO>(newUser));
         }
-
-        [HttpDelete]
-        [Route("delete")]
-        [AllowAnonymous]
-        public ActionResult<UserDTO> DeleteUser(int empresa, int revenda)
-        {
-            //var newUser = _userService.SaveUser(user);
-            var newUser = new UserModel();
-
-            return Ok(_mapper.Map<UserModel, UserDTO>(newUser));
-        }
     }
 }

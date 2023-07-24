@@ -32,16 +32,20 @@ namespace sample_application
             Configuration = configuration;
         }
 
+        private string ResolveConnectionString => string.IsNullOrEmpty(Configuration.GetConnectionString("database")) ?
+            Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE")?.Trim() : Configuration.GetConnectionString("database");
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             var connectionString = (Configuration.GetConnectionString("type") == "ORACLE" ? 
-                DataBaseType.ORACLE : DataBaseType.POSTGRESQL, Configuration.GetConnectionString("database"));
+                DataBaseType.ORACLE : DataBaseType.POSTGRESQL, ResolveConnectionString);
 
             services.AddDbContext<ApplicationContext>(opt =>
             {
+                Console.WriteLine(connectionString.Item1);
                 if (connectionString.Item1 == DataBaseType.POSTGRESQL)
                 {
                     opt.UseNpgsql(connectionString.Item2, opt =>
@@ -71,7 +75,7 @@ namespace sample_application
 
             services.AddAuth(tokenSettings);
             #endregion
-            //services.AddCors();
+            services.AddCors();
             services.AddControllers();
 
             #region JWT Setup
@@ -90,7 +94,7 @@ namespace sample_application
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
+                    ClockSkew = TimeSpan.Zero,
                 };
             });
             #endregion
@@ -146,12 +150,12 @@ namespace sample_application
 
             app.UseHttpsRedirection();
 
-            /*app.UseCors(x =>
+            app.UseCors(x =>
             {
                 x.AllowAnyOrigin();
                 x.AllowAnyHeader();
                 x.AllowAnyMethod();
-            });*/
+            });
 
             app.UseRouting();
 

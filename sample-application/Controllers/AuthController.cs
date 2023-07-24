@@ -38,11 +38,11 @@ namespace sample_application.Controllers
             var refreshToken = _authService.GenerateRefreshToken();
             _authService.SaveRefreshToken(userModel.Login, refreshToken);
 
-            return Ok(new
+            return Ok(new AuthDTO
             {
-                token,
-                user = _mapper.Map<UserDTO>(userModel),
-                refreshToken
+                Token = token,
+                User = _mapper.Map<UserDTO>(userModel),
+                RefreshToken = refreshToken
             });
         }
 
@@ -64,10 +64,10 @@ namespace sample_application.Controllers
             _authService.DeleteRefreshToken(login, refreshToken.RefreshToken);
             _authService.SaveRefreshToken(login, newRefreshToken);
 
-            return Ok(new
+            return Ok(new RefreshTokenDTO
             {
-                token = newToken,
-                refreshToken = newRefreshToken
+                Token = newToken,
+                RefreshToken = newRefreshToken
             });
         }
 
