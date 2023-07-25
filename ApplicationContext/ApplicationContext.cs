@@ -15,6 +15,8 @@ namespace ApplicationContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             if (Database.ProviderName!.Contains("PostgreSQL"))
             {
                 modelBuilder.ApplyConfigurationsFromAssembly(Assembly.Load("MigrationsPostgreSQL"));
@@ -26,15 +28,5 @@ namespace ApplicationContext
         }
 
         public DbSet<UserModel> Users { get; set; }
-    }
-
-    public class User
-    {
-        public long Id { get; set; }
-        public string Name { get; set; }
-        public string Email { get; set; }
-        public string Login { get; set; }
-        public string Password { get; set; }
-        public string Bio { get; set; }
     }
 }
