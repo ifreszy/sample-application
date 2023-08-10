@@ -3,44 +3,47 @@ using System;
 using DatabaseContext;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Oracle.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace MigrationsPostgreSQL.Migrations
+namespace MigrationsOracle.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20230728234544_UsersMigration")]
+    partial class UsersMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Entity.Models.RoleModel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
+                        .HasColumnType("NUMBER(10)");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
-                        .HasColumnType("text")
-                        .HasColumnName("description");
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("DESCRIPTION");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("NAME");
 
                     b.HasKey("Id");
 
-                    b.ToTable("roles", null, t =>
+                    b.ToTable("ROLES", null, t =>
                         {
                             t.ExcludeFromMigrations();
                         });
@@ -50,40 +53,40 @@ namespace MigrationsPostgreSQL.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
+                        .HasColumnType("NUMBER(19)")
+                        .HasColumnName("ID");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    OraclePropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Bio")
-                        .HasColumnType("text")
-                        .HasColumnName("bio");
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("BIO");
 
                     b.Property<string>("Email")
-                        .HasColumnType("text")
-                        .HasColumnName("email");
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("EMAIL");
 
                     b.Property<string>("Login")
-                        .HasColumnType("text")
-                        .HasColumnName("login");
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("LOGIN");
 
                     b.Property<string>("Name")
-                        .HasColumnType("text")
-                        .HasColumnName("name");
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("NAME");
 
                     b.Property<string>("Password")
-                        .HasColumnType("text")
-                        .HasColumnName("password");
+                        .HasColumnType("NVARCHAR2(2000)")
+                        .HasColumnName("PASSWORD");
 
                     b.Property<int?>("RoleId")
-                        .HasColumnType("integer")
-                        .HasColumnName("role_id");
+                        .HasColumnType("NUMBER(10)")
+                        .HasColumnName("ROLE_ID");
 
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("users", null, t =>
+                    b.ToTable("USERS", null, t =>
                         {
                             t.ExcludeFromMigrations();
                         });

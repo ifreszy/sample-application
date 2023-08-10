@@ -16,6 +16,7 @@ namespace DTO
         public string Email { get; set; }
         public string Login { get; set; }
         public string Bio { get; set; }
+        public string Role { get; set; }
     }
 
     public class CreateUserDTO

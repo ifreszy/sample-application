@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Migrations.Migrations
+namespace MigrationsPostgreSQL.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class UsersMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,14 +28,12 @@ namespace Migrations.Migrations
                         table.UniqueConstraint("UK_userLogin", x => x.Login);
                     }
                 );
-
-            migrationBuilder.CreateIndex("IDX_userId", "users", "id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable("USERS");
+            migrationBuilder.DropTable("users");
         }
     }
 }

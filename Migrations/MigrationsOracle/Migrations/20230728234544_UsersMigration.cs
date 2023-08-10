@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Migrations.Migrations
+namespace MigrationsOracle.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class UsersMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

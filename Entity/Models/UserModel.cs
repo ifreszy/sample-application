@@ -15,5 +15,7 @@ namespace Entity.Models
         public string Login { get; set; }
         public string Password { get; set; }
         public string Bio { get; set; }
+        public int? RoleId { get; set; }
+        public virtual RoleModel Role { get; set; }
     }
 }

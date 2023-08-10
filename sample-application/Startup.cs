@@ -15,8 +15,8 @@ using Services.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Data.Database.Utils;
-using Migrations;
-using ApplicationContext;
+using DatabaseContext;
+//using ApplicationContext;
 
 namespace sample_application
 {
@@ -44,7 +44,7 @@ namespace sample_application
                 Database = connectionString.Item2
             });
 
-            services.AddDbContext<DatabaseContext>(opt =>
+            services.AddDbContext<ApplicationContext>(opt =>
             {
                 Console.WriteLine(connectionString.Item1);
                 if (connectionString.Item1 == DataBaseType.POSTGRESQL)

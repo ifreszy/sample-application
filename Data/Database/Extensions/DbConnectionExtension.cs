@@ -22,7 +22,7 @@ namespace Data.Database.Extensions
                     if (string.IsNullOrEmpty(connStr))
                         throw new Exception("Connection string not defined"); 
 
-                    services.AddScoped((sp) => DbConnectionHelper.CreateDatabaseConnection(connStr));
+                    services.AddTransient((sp) => DbConnectionHelper.CreateDatabaseConnection(connStr));
                     services.AddTransient<IDbCustomConnection, DbCustomConnection>();
                     break;
                 case DataBaseType.ORACLE:
@@ -32,7 +32,7 @@ namespace Data.Database.Extensions
                     if (string.IsNullOrEmpty(connStr))
                         throw new Exception("Connection string not defined");
 
-                    services.AddScoped((sp) => DbConnectionHelper.CreateOracleDatabaseConnection(connStr));
+                    services.AddTransient((sp) => DbConnectionHelper.CreateOracleDatabaseConnection(connStr));
                     services.AddTransient<IDbCustomConnection, DbCustomConnection>();
                     break;
             }

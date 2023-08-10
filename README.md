@@ -7,11 +7,11 @@
 ### To add a new migration use: 
 #### .NET Core CLI
 ```csharp 
-dotnet ef migrations add NewMigration --project Migrations\MigrationsPostgreSQL
+dotnet ef migrations add NewMigration --startup-project sample-application --project Migrations\MigrationsPostgreSQL
 ```
 or
 ```csharp 
-dotnet ef migrations add NewMigration --project Migrations\MigrationsOracle
+dotnet ef migrations add NewMigration --startup-project sample-application --project Migrations\MigrationsOracle
 ```
 #### Visual Studio - Package Manager
 ```csharp 

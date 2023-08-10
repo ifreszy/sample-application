@@ -23,6 +23,7 @@
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\DTO\DTO.csproj" />
     <ProjectReference Include="..\Entity\Entity.csproj" />
+    <ProjectReference Include="..\Migrations\DatabaseContext\DatabaseContext.csproj" />
     <ProjectReference Include="..\Migrations\MigrationsOracle\MigrationsOracle.csproj" />
     <ProjectReference Include="..\Migrations\MigrationsPostgreSQL\MigrationsPostgreSQL.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />

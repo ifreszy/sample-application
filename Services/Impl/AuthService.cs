@@ -28,7 +28,8 @@ namespace Services.Impl
             {
                 Subject = new ClaimsIdentity(new []
                 {
-                   new Claim(type: ClaimTypes.Name, value: user.Login)
+                   new Claim(type: ClaimTypes.Name, value: user.Login),
+                   new Claim(type: ClaimTypes.Role, value: user.Role.Name)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(_settings.ExpiresIn),
                 NotBefore = DateTime.UtcNow,

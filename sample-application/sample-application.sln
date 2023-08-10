@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "sample-application", "sample-application.csproj", "{7EFAC77E-6701-4408-B14B-8F3CB970C77C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{1EFEA6EC-C920-4B0C-8B9B-836039808D37} = {1EFEA6EC-C920-4B0C-8B9B-836039808D37}
-	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "..\Data\Data.csproj", "{6778EA7C-40E3-4ED8-A413-DFF095846B82}"
 EndProject
@@ -22,13 +19,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A7BDAEED
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServicesTests", "..\ServicesTests\ServicesTests.csproj", "{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{60611A84-8996-4AA2-8E4A-C0CC9ABD483B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Migrations", "Migrations", "{75665A84-084F-4DAA-BE06-FDCFAB18671E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigrationsPostgreSQL", "..\Migrations\MigrationsPostgreSQL\MigrationsPostgreSQL.csproj", "{E34EDB29-FC8B-4E24-8AD6-04C59887C205}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigrationsOracle", "..\Migrations\MigrationsOracle\MigrationsOracle.csproj", "{8FC99668-FC5A-49D5-AD1D-81A4B847D9C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigrationsOracle", "..\Migrations\MigrationsOracle\MigrationsOracle.csproj", "{1EFEA6EC-C920-4B0C-8B9B-836039808D37}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseContext", "..\Migrations\DatabaseContext\DatabaseContext.csproj", "{4908D9F9-CF91-4315-912E-6BF3BC590CDE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApplicationContext", "..\ApplicationContext\ApplicationContext.csproj", "{D8FDA778-131B-410C-9E6F-15B92447F8B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OracleConfigurations", "..\Migrations\OracleConfigurations\OracleConfigurations.csproj", "{8FFBB6DA-58D8-4C62-AC42-A5CC559C3A8A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MigrationsPostgreSQL", "..\Migrations\MigrationsPostgreSQL\MigrationsPostgreSQL.csproj", "{9FDD2F20-4C37-4E39-B88A-72C584D5DA32}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostgreSQLConfigurations", "..\Migrations\PostgreSQLConfigurations\PostgreSQLConfigurations.csproj", "{36B40953-E91A-467B-ABFB-567BD79A9009}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -64,27 +65,37 @@ Global
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E34EDB29-FC8B-4E24-8AD6-04C59887C205}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1EFEA6EC-C920-4B0C-8B9B-836039808D37}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8FDA778-131B-410C-9E6F-15B92447F8B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC99668-FC5A-49D5-AD1D-81A4B847D9C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC99668-FC5A-49D5-AD1D-81A4B847D9C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC99668-FC5A-49D5-AD1D-81A4B847D9C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC99668-FC5A-49D5-AD1D-81A4B847D9C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4908D9F9-CF91-4315-912E-6BF3BC590CDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4908D9F9-CF91-4315-912E-6BF3BC590CDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4908D9F9-CF91-4315-912E-6BF3BC590CDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4908D9F9-CF91-4315-912E-6BF3BC590CDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FFBB6DA-58D8-4C62-AC42-A5CC559C3A8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FFBB6DA-58D8-4C62-AC42-A5CC559C3A8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FFBB6DA-58D8-4C62-AC42-A5CC559C3A8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FFBB6DA-58D8-4C62-AC42-A5CC559C3A8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FDD2F20-4C37-4E39-B88A-72C584D5DA32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FDD2F20-4C37-4E39-B88A-72C584D5DA32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FDD2F20-4C37-4E39-B88A-72C584D5DA32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FDD2F20-4C37-4E39-B88A-72C584D5DA32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36B40953-E91A-467B-ABFB-567BD79A9009}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36B40953-E91A-467B-ABFB-567BD79A9009}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36B40953-E91A-467B-ABFB-567BD79A9009}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36B40953-E91A-467B-ABFB-567BD79A9009}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{ACD416C7-B328-4E5A-9086-DAA5BAD4252C} = {A7BDAEED-F1E9-4D96-B2B2-EAC05081D76F}
-		{E34EDB29-FC8B-4E24-8AD6-04C59887C205} = {60611A84-8996-4AA2-8E4A-C0CC9ABD483B}
-		{1EFEA6EC-C920-4B0C-8B9B-836039808D37} = {60611A84-8996-4AA2-8E4A-C0CC9ABD483B}
-		{D8FDA778-131B-410C-9E6F-15B92447F8B2} = {60611A84-8996-4AA2-8E4A-C0CC9ABD483B}
+		{8FC99668-FC5A-49D5-AD1D-81A4B847D9C6} = {75665A84-084F-4DAA-BE06-FDCFAB18671E}
+		{4908D9F9-CF91-4315-912E-6BF3BC590CDE} = {75665A84-084F-4DAA-BE06-FDCFAB18671E}
+		{8FFBB6DA-58D8-4C62-AC42-A5CC559C3A8A} = {75665A84-084F-4DAA-BE06-FDCFAB18671E}
+		{9FDD2F20-4C37-4E39-B88A-72C584D5DA32} = {75665A84-084F-4DAA-BE06-FDCFAB18671E}
+		{36B40953-E91A-467B-ABFB-567BD79A9009} = {75665A84-084F-4DAA-BE06-FDCFAB18671E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9FAD5FCD-50C5-47C8-B47A-608B86597985}
