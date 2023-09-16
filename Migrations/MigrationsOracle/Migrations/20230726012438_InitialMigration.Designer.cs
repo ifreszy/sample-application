@@ -3,15 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using Oracle.EntityFrameworkCore.Metadata;
 
 #nullable disable
 
-namespace Migrations.Migrations
+namespace MigrationsOracle.Migrations
 {
-    [DbContext(typeof(ApplicationContext))]
-    [Migration("20230121190328_InitialMigration")]
+    [Migration("20230726012438_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -20,9 +18,9 @@ namespace Migrations.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "7.0.2")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            OracleModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 #pragma warning restore 612, 618
         }
     }

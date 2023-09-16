@@ -15,6 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="7.21.9" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
   </ItemGroup>
 
@@ -22,7 +23,9 @@
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\DTO\DTO.csproj" />
     <ProjectReference Include="..\Entity\Entity.csproj" />
-    <ProjectReference Include="..\Migrations\Migrations.csproj" />
+    <ProjectReference Include="..\Migrations\DatabaseContext\DatabaseContext.csproj" />
+    <ProjectReference Include="..\Migrations\MigrationsOracle\MigrationsOracle.csproj" />
+    <ProjectReference Include="..\Migrations\MigrationsPostgreSQL\MigrationsPostgreSQL.csproj" />
     <ProjectReference Include="..\Repository\Repository.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
   </ItemGroup>

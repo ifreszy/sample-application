@@ -1,6 +1,10 @@
-﻿using Data.Database;
+﻿//using ApplicationContext;
+using Data.Database;
+using DatabaseContext;
 using DTO;
 using Entity.Models;
+using Microsoft.EntityFrameworkCore;
+//using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,32 +16,50 @@ namespace Repository.Impl
     public class UserRepository : IUserRepository
     {
         private readonly IDbCustomConnection _connection;
-        public UserRepository(IDbCustomConnection connection)
+        private readonly ApplicationContext _dbContext;
+        private readonly string SQL_SEQUENCE = "SELECT USERS_SEQ.CURRVAL FROM DUAL";
+        public UserRepository(IDbCustomConnection connection, ApplicationContext dbContext)
         {
             _connection = connection;
+            _dbContext = dbContext;
         }
 
         public UserModel GetUserByLogin(string login)
         {
-            string sql = "SELECT * FROM users WHERE login = :login";
-
-            return _connection.QuerySingle<UserModel>(sql, new { login });
+            return _dbContext.Users.Include(x => x.Role).Where(x => x.Login == login).FirstOrDefault();
         }
 
         public IEnumerable<UserModel> GetUsers()
         {
-            string sql = "SELECT * FROM USERS";
-
-            return _connection.Query<UserModel>(sql);
+            return _dbContext.Users.Include(x => x.Role).ToList();
         }
 
         public UserModel SaveUser(UserModel user)
         {
-            string sql = @"INSERT INTO USERS (Name, Email, Login, Password, Bio)
-                            VALUES
-                            (:Name, :Email, :Login, :Password, :Bio) RETURNING Id";
-            
-            user.Id = _connection.ExecuteScalar<long>(sql, user);
+            string sql;
+
+            var guestRole = _dbContext.Roles.First(x => x.Name == "Guest");
+
+            user.RoleId = guestRole.Id;
+
+            if (_connection.DataBaseType == Data.Database.Utils.DataBaseType.POSTGRESQL) 
+            {
+                sql = @"INSERT INTO USERS (NAME, EMAIL, LOGIN, PASSWORD, BIO, ROLE_ID)
+                        VALUES
+                        (:Name, :Email, :Login, :Password, :Bio, :RoleId) returning ID";
+
+                user.Id = _connection.ExecuteScalar<long>(sql, user);
+                user.Role = _connection.QuerySingle<RoleModel>("SELECT * FROM roles WHERE id = :roleId", new {roleId = user.RoleId });
+            }
+            else
+            {
+                sql = @"INSERT INTO USERS (NAME, EMAIL, LOGIN, PASSWORD, BIO, ROLE_ID)
+                        VALUES
+                        (:Name, :Email, :Login, :Password, :Bio, :RoleId)";
+                _connection.ExecuteScalar<long>(sql, user);
+                user.Id = _connection.ExecuteScalar<long>(SQL_SEQUENCE);
+                user.Role = _connection.QuerySingle<RoleModel>("SELECT * FROM ROLES WHERE ID = :roleId", new { roleId = user.RoleId });
+            }
 
             return user;
         }

@@ -11,12 +11,31 @@ namespace Data.Database.Extensions
 {
     public static class DbConnectionExtension
     {
-        public static void AddDbConnection(this IServiceCollection services, string connStr)
+        public static void AddDbConnection(this IServiceCollection services, string connStr, DataBaseType type = DataBaseType.POSTGRESQL)
         {
-            if (string.IsNullOrEmpty(connStr))
-                connStr = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE");
-            services.AddScoped((sp) => DbConnectionHelper.CreateDatabaseConnection(connStr));
-            services.AddTransient<IDbCustomConnection, DbCustomConnection>();
+            switch (type)
+            {
+                case DataBaseType.POSTGRESQL:
+                    if (string.IsNullOrEmpty(connStr))
+                        connStr = Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE").Trim();
+
+                    if (string.IsNullOrEmpty(connStr))
+                        throw new Exception("Connection string not defined"); 
+
+                    services.AddTransient((sp) => DbConnectionHelper.CreateDatabaseConnection(connStr));
+                    services.AddTransient<IDbCustomConnection, DbCustomConnection>();
+                    break;
+                case DataBaseType.ORACLE:
+                    if (string.IsNullOrEmpty(connStr))
+                        connStr = Environment.GetEnvironmentVariable("ORACLECONNSTR_DATABASE").Trim();
+
+                    if (string.IsNullOrEmpty(connStr))
+                        throw new Exception("Connection string not defined");
+
+                    services.AddTransient((sp) => DbConnectionHelper.CreateOracleDatabaseConnection(connStr));
+                    services.AddTransient<IDbCustomConnection, DbCustomConnection>();
+                    break;
+            }
         }
     }
 }

@@ -2,12 +2,14 @@
 using DTO;
 using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace sample_application.Controllers
@@ -27,7 +29,7 @@ namespace sample_application.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public ActionResult<IEnumerable<UserDTO>> Get()
         {
             var users = _userService.GetUsers();

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Data.Database.Utils;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -15,5 +16,6 @@ namespace Data.Database
         public IDbTransaction BeginTransaction();
         public T QuerySingle<T>(string query, object parameters = null, IDbTransaction transaction = null);
         public int Execute(string query, object parameters = null, IDbTransaction transaction = null);
+        public DataBaseType DataBaseType { get; }
     }
 }

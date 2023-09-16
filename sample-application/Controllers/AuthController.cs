@@ -3,6 +3,7 @@ using DTO;
 using Entity.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Services;
 using Services.Impl;
 
@@ -21,7 +22,7 @@ namespace sample_application.Controllers
             _userService = userService;
         }
 
-        [Route("Auth")]
+        [Route("auth")]
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Authorize(UserAuthDTO user)
@@ -34,11 +35,39 @@ namespace sample_application.Controllers
             }
 
             var token = _authService.GenerateToken(userModel);
+            var refreshToken = _authService.GenerateRefreshToken();
+            _authService.SaveRefreshToken(userModel.Login, refreshToken);
 
-            return Ok(new
+            return Ok(new AuthDTO
             {
-                token,
-                user = _mapper.Map<UserDTO>(userModel)
+                Token = token,
+                User = _mapper.Map<UserDTO>(userModel),
+                RefreshToken = refreshToken
+            });
+        }
+
+        [Route("auth/refresh")]
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Refresh(RefreshTokenDTO refreshToken)
+        {
+            var principal = _authService.GetPrincipalFromToken(refreshToken.Token);
+            var login = principal.Identity.Name;
+
+            var cacheRefreshToken = _authService.GetRefreshToken(login);
+
+            if (refreshToken.RefreshToken != cacheRefreshToken)
+                throw new SecurityTokenException("Invalid refresh token");
+
+            var newToken = _authService.GenerateToken(principal.Claims);
+            var newRefreshToken = _authService.GenerateRefreshToken();
+            _authService.DeleteRefreshToken(login, refreshToken.RefreshToken);
+            _authService.SaveRefreshToken(login, newRefreshToken);
+
+            return Ok(new RefreshTokenDTO
+            {
+                Token = newToken,
+                RefreshToken = newRefreshToken
             });
         }
 

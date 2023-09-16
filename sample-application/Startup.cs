@@ -1,26 +1,22 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Data.Database.Extensions;
 using Repository.Extensions;
 using Services.Extensions;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using sample_application.Mappings.Extension;
-using Migrations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Services.Auth;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Data.Database.Utils;
+using DatabaseContext;
+//using ApplicationContext;
 
 namespace sample_application
 {
@@ -31,20 +27,44 @@ namespace sample_application
             Configuration = configuration;
         }
 
+        private string ResolveConnectionString => string.IsNullOrEmpty(Configuration.GetConnectionString("database")) ?
+            Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE")?.Trim() : Configuration.GetConnectionString("database");
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationContext>(opt =>
+            var connectionString = (Configuration.GetConnectionString("type") == "ORACLE" ? 
+                DataBaseType.ORACLE : DataBaseType.POSTGRESQL, ResolveConnectionString);
+
+            services.AddSingleton(sp => new ConnectionSettings()
             {
-                opt.UseNpgsql(Environment.GetEnvironmentVariable("POSTGRESQLCONNSTR_DATABASE"), x =>
-                {
-                    x.MigrationsAssembly("Migrations");
-                });
+                Type = connectionString.Item1,
+                Database = connectionString.Item2
             });
 
-            services.AddDbConnection(Configuration.GetConnectionString("database"));
+            services.AddDbContext<ApplicationContext>(opt =>
+            {
+                Console.WriteLine(connectionString.Item1);
+                if (connectionString.Item1 == DataBaseType.POSTGRESQL)
+                {
+                    opt.UseNpgsql(connectionString.Item2, opt =>
+                    {
+                        opt.MigrationsAssembly(@"MigrationsPostgreSQL");
+                    });
+                }
+
+                if (connectionString.Item1 == DataBaseType.ORACLE) 
+                {
+                    opt.UseOracle(connectionString.Item2, opt =>
+                    {
+                        opt.MigrationsAssembly(@"MigrationsOracle");
+                    });
+                }
+            });
+
+            services.AddDbConnection(connectionString.Item2, connectionString.Item1);
             services.AddMappers();
             services.AddRepositories();
             services.AddServices();
@@ -56,7 +76,7 @@ namespace sample_application
 
             services.AddAuth(tokenSettings);
             #endregion
-
+            services.AddCors();
             services.AddControllers();
 
             #region JWT Setup
@@ -73,7 +93,9 @@ namespace sample_application
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenSettings.Key)),
                     ValidateIssuer = false,
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.Zero,
                 };
             });
             #endregion
@@ -128,6 +150,13 @@ namespace sample_application
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(x =>
+            {
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+                x.AllowAnyMethod();
+            });
 
             app.UseRouting();
 

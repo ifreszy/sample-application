@@ -388,3 +388,7 @@ FodyWeavers.xsd
 *.sln.iml
 
 projetinho.xml
+/Migrations/MigrationsOracle/Migrations/ApplicationContextModelSnapshot.cs
+/Migrations/MigrationsPostgreSQL/Migrations/ApplicationContextModelSnapshot.cs
+
+

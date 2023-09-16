@@ -17,6 +17,7 @@ namespace sample_application.Mappings
             {
                 #region Entity To DTO
                 cfg.CreateMap<UserModel, UserDTO>()
+                    .ForMember(x => x.Role, map => map.MapFrom(y => y.Role.Description))
                     .ForSourceMember(x => x.Password, y => y.DoNotValidate());
                 #endregion
 
