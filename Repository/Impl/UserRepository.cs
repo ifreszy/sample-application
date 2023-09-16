@@ -31,16 +31,16 @@ namespace Repository.Impl
 
         public IEnumerable<UserModel> GetUsers()
         {
-            return _dbContext.Users.ToList();
+            return _dbContext.Users.Include(x => x.Role).ToList();
         }
 
         public UserModel SaveUser(UserModel user)
         {
             string sql;
 
-            //var guestRole = _dbContext.Roles.First(x => x.Name == "Guest");
+            var guestRole = _dbContext.Roles.First(x => x.Name == "Guest");
 
-            user.RoleId = user.RoleId.GetValueOrDefault(1);
+            user.RoleId = guestRole.Id;
 
             if (_connection.DataBaseType == Data.Database.Utils.DataBaseType.POSTGRESQL) 
             {
@@ -49,6 +49,7 @@ namespace Repository.Impl
                         (:Name, :Email, :Login, :Password, :Bio, :RoleId) returning ID";
 
                 user.Id = _connection.ExecuteScalar<long>(sql, user);
+                user.Role = _connection.QuerySingle<RoleModel>("SELECT * FROM roles WHERE id = :roleId", new {roleId = user.RoleId });
             }
             else
             {
@@ -57,6 +58,7 @@ namespace Repository.Impl
                         (:Name, :Email, :Login, :Password, :Bio, :RoleId)";
                 _connection.ExecuteScalar<long>(sql, user);
                 user.Id = _connection.ExecuteScalar<long>(SQL_SEQUENCE);
+                user.Role = _connection.QuerySingle<RoleModel>("SELECT * FROM ROLES WHERE ID = :roleId", new { roleId = user.RoleId });
             }
 
             return user;
